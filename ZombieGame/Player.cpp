@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <iostream>
 #include "Gun.h"
+#include <ResourceManager.h>
 
 Player::Player() :
     _currentGunIndex(-1) {
@@ -17,10 +18,10 @@ void Player::init(float speed, glm::vec2 pos, Bengine::InputManager* inputManage
     _position = pos;
     _inputManager = inputManager;
     _bullets = bullets;
-    _camera = camera;
-    _color.r = 0;
-    _color.g = 0;
-    _color.b = 185;
+    _camera = camera;	
+	_color.r = 200;
+	_color.g = 200;
+	_color.b = 200;
     _color.a = 255;
     _health = 150;
 }
@@ -35,11 +36,36 @@ void Player::addGun(Gun* gun) {
     }
 }
 
-Gun* Player::getGun()
-{
-	return _guns.at(_currentGunIndex);
-}
+void Player::draw(Bengine::SpriteBatch& _spriteBatch) {
 
+	textureID[0] = Bengine::ResourceManager::getTexture("Textures/Hero1.png").id;
+	textureID[1] = Bengine::ResourceManager::getTexture("Textures/Hero2.png").id;
+	textureID[2] = Bengine::ResourceManager::getTexture("Textures/Hero3.png").id;
+
+	const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+
+	glm::vec4 destRect;
+	destRect.x = _position.x;
+	destRect.y = _position.y;
+	destRect.z = AGENT_WIDTH;
+	destRect.w = AGENT_WIDTH;
+
+	if (_animation <= 10 || _animation <= 40)
+	{
+		_spriteBatch.draw(destRect, uvRect, textureID[0], 0.0f, _color);
+		_spriteBatch1 = _spriteBatch;
+	}
+	else if (_animation <= 20 || _animation <= 50)
+	{
+		_spriteBatch.draw(destRect, uvRect, textureID[1], 0.0f, _color);
+		_spriteBatch2 = _spriteBatch;
+	}
+	else if (_animation <= 30 || _animation <= 60)
+	{
+		_spriteBatch.draw(destRect, uvRect, textureID[2], 0.0f, _color);
+		_spriteBatch3 = _spriteBatch;
+	}
+}
 
 void Player::update(const std::vector<std::string>& levelData,
                     std::vector<Human*>& humans,
@@ -47,14 +73,22 @@ void Player::update(const std::vector<std::string>& levelData,
 
     if (_inputManager->isKeyPressed(SDLK_w)) {
         _position.y += _speed;
+		_animation++;
     } else if (_inputManager->isKeyPressed(SDLK_s)) {
         _position.y -= _speed;
+		_animation++;
     }
     if (_inputManager->isKeyPressed(SDLK_a)) {
         _position.x -= _speed;
+		_animation++;
     } else if (_inputManager->isKeyPressed(SDLK_d)) {
         _position.x += _speed;
+		_animation++;
     }
+	if (_animation == 60)
+	{
+		_animation = 0;
+	}
 
     if (_inputManager->isKeyPressed(SDLK_1) && _guns.size() >= 0) {
         _currentGunIndex = 0;
@@ -76,8 +110,7 @@ void Player::update(const std::vector<std::string>& levelData,
         _guns[_currentGunIndex]->update(_inputManager->isKeyPressed(SDL_BUTTON_LEFT),
                                         centerPosition,
                                         direction,
-                                        *_bullets);
-                                        
+                                        *_bullets);                                  
 
     }
 

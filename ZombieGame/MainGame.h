@@ -9,8 +9,6 @@
 #include "Player.h"
 #include "Level.h"
 #include "Bullet.h"
-#include "Ammo.h"
-#include "PowerUP.h"
 
 class Zombie;
 
@@ -53,11 +51,11 @@ private:
     /// Handles input processing
     void processInput();
 
+	///Makes Spritebatches
+	void makeSpriteBatch(Bengine::SpriteBatch& _spriteBatch);
+
     /// Renders the game
     void drawGame();
-
-	/// New functions
-	void initSoldiers();
 
     /// Member Variables
     Bengine::Window _window; ///< The game window
@@ -68,7 +66,7 @@ private:
 
     Bengine::Camera2D _camera; ///< Main Camera
 
-    Bengine::SpriteBatch _agentSpriteBatch; ///< Draws all agents
+    Bengine::SpriteBatch _agentSpriteBatch; ///< Draws all agents	
 
     std::vector<Level*> _levels; ///< vector of all levels
 
@@ -82,16 +80,14 @@ private:
     std::vector<Human*> _humans; ///< Vector of all humans
     std::vector<Zombie*> _zombies; ///< Vector of all zombies
     std::vector<Bullet> _bullets;
-	std::vector<Ammo*> _ammo;
-	std::vector<PowerUP*> _powerUPs;
+
+	Bengine::Color _color;
+	glm::vec2 _position;
+	glm::vec2 getPosition() const { return _position; }
 
     int _numHumansKilled; ///< Humans killed by player
     int _numZombiesKilled; ///< Zombies killed by player
 
     GameState _gameState;
-
-	/// New variables
-	bool _soldiersSpawned;
-	float _timeElapsed;
 };
 

@@ -5,6 +5,7 @@
 #include "Human.h"
 #include "Zombie.h"
 #include "Level.h"
+#include "Player.h"
 
 Bullet::Bullet(glm::vec2 position, glm::vec2 direction, float damage, float speed) :
     _position(position),

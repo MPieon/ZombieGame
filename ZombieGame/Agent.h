@@ -17,22 +17,18 @@ public:
 
     virtual void update(const std::vector<std::string>& levelData,
                         std::vector<Human*>& humans,
-                        std::vector<Zombie*>& zombies);
+                        std::vector<Zombie*>& zombies) = 0;
 
     bool collideWithLevel(const std::vector<std::string>& levelData);
 
     bool collideWithAgent(Agent* agent);
 
-    void draw(Bengine::SpriteBatch& _spriteBatch);
-   
-	void draw(Bengine::SpriteBatch& _spriteBatch, std::string texturePath);
-
+    //void draw(Bengine::SpriteBatch& _spriteBatch);
+    
     // Return true if we died
     bool applyDamage(float damage);
 
     glm::vec2 getPosition() const { return _position; }
-
-	int getType() const { return _type;  }
 
 protected:
 
@@ -45,8 +41,8 @@ protected:
     
     glm::vec2 _position;
     Bengine::Color _color;
-	float _health;
+	int _texture;
     float _speed;
-	int _type;
+    float _health;
 };
 
